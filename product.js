@@ -47,8 +47,26 @@ const Product = new mongoose.model('Product',productSchema)
 // Product.save()
 
 //This will be failed only because runValidators included. Otherwise, update method will skip and update validations
-Product.findOneAndUpdate({name: 'Rtx 5090'},{price: -1899},{runValidators: true, new: true})
-    .then(p => console.log(p))
-    .catch(err=> console.log(err))
+// Product.findOneAndUpdate({name: 'Rtx 5090'},{price: -1899},{runValidators: true, new: true})
+//     .then(p => console.log(p))
+//     .catch(err=> console.log(err))
 
+// --- Middleware Example ---
+    
+productSchema.pre('save', async function () {
+    console.log(`About the save: ${this.name}`)
+})
+
+productSchema.post('save', async function () {
+    console.log(`This saved!!! ${this.name}`)
+})
+
+Product.insert({name: 'RX 7900', price: 899, onSale: true, categories: ['Hardware','GPU','AMD']})
+    .then(() => {
+        console.log('its worked')
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+Product.save()
 
